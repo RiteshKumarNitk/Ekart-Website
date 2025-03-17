@@ -80,7 +80,7 @@ const AccountScreen = () => {
                     <Input
                       type="text"
                       className="form-elem-control text-outerspace font-semibold"
-                      value="Richard Doe"
+                      value="Neeraj "
                       readOnly
                     />
                     <button type="button" className="form-control-change-btn">

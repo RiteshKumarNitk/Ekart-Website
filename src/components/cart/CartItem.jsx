@@ -21,17 +21,24 @@ const CartTableRowWrapper = styled.tr`
         height: 24px;
         border: 1px solid ${defaultTheme.color_platinum};
         border-radius: 2px;
+        cursor: pointer;
 
         &:hover {
           border-color: ${defaultTheme.color_sea_green};
           background-color: ${defaultTheme.color_sea_green};
           color: ${defaultTheme.color_white};
         }
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
       }
 
       .qty-value {
         width: 40px;
         height: 24px;
+        text-align: center;
       }
     }
   }
@@ -58,7 +65,7 @@ const CartTableRowWrapper = styled.tr`
   }
 `;
 
-const CartItem = ({ cartItem }) => {
+const CartItem = ({ cartItem, onIncrease, onDecrease }) => {
   return (
     <CartTableRowWrapper key={cartItem.id}>
       <td>
@@ -72,38 +79,41 @@ const CartItem = ({ cartItem }) => {
               <span className="font-semibold">Color: </span> {cartItem.color}
             </p>
             <p className="text-sm text-gray inline-flex">
-              <span className="font-semibold">Size:</span>
-              {cartItem.size}
+              <span className="font-semibold">Size:</span> {cartItem.size}
             </p>
           </div>
         </div>
       </td>
       <td>
         <span className="text-lg font-bold text-outerspace">
-          ${cartItem.price}
+        ₹{cartItem.price}
         </span>
       </td>
       <td>
         <div className="cart-tbl-qty flex items-center">
-          <button className="qty-dec-btn">
+          <button
+            className="qty-dec-btn"
+            onClick={() => onDecrease(cartItem.id)}
+            disabled={cartItem.quantity <= 1}
+          >
             <i className="bi bi-dash-lg"></i>
           </button>
           <span className="qty-value inline-flex items-center justify-center font-medium text-outerspace">
-            2
+            {cartItem.quantity}
           </span>
-          <button className="qty-inc-btn">
+          <button className="qty-inc-btn" onClick={() => onIncrease(cartItem.id)}>
             <i className="bi bi-plus-lg"></i>
           </button>
         </div>
       </td>
       <td>
         <span className="cart-tbl-shipping uppercase text-silver font-bold">
-          {cartItem.shipping === 0 ? "Free" : cartItem.shipping}
+          {cartItem.shipping === 0 ? "Free" : `$${cartItem.shipping}`}
         </span>
       </td>
       <td>
         <span className="text-lg font-bold text-outerspace">
-          ${cartItem.price * cartItem.quantity}
+        ₹{cartItem.price * cartItem.quantity}
         </span>
       </td>
       <td>
@@ -120,5 +130,7 @@ const CartItem = ({ cartItem }) => {
 export default CartItem;
 
 CartItem.propTypes = {
-  cartItem: PropTypes.object,
+  cartItem: PropTypes.object.isRequired,
+  onIncrease: PropTypes.func.isRequired,
+  onDecrease: PropTypes.func.isRequired,
 };
